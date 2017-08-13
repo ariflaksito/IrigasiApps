@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">#00796b</color>
     <color name="colorAccent">#efefef</color>
     <color name="backgroundColor">#009688</color>
+    <color name="lightBgColor">#efefef</color>
 
+    <color name="darkColor">#373737</color>
     <color name="secondaryColor">#757575</color>
     <color name="otherColor">#ff5722</color>
 </resources>

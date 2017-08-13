@@ -1,16 +1,18 @@
 package net.ariflaksito.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.ariflaksito.irigasiapp.DetailActivity;
 import net.ariflaksito.irigasiapp.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by ariflaksito on 8/10/17.
@@ -40,13 +42,13 @@ public class AdapterLocation extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View view, final ViewGroup parent) {
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             view = inflater.inflate(R.layout.list_location, parent, false);
         }
 
-        HashMap<String, String> dataList = data.get(position);
+        final HashMap<String, String> dataList = data.get(position);
 
         TextView name = (TextView) view.findViewById(R.id.name);
         name.setText(dataList.get("name"));
@@ -56,6 +58,24 @@ public class AdapterLocation extends BaseAdapter {
 
         TextView desc = (TextView) view.findViewById(R.id.desc);
         desc.setText(dataList.get("desc"));
+
+        LinearLayout button = (LinearLayout) view.findViewById(R.id.id_loc);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String id = dataList.get("id");
+                Intent intent = new Intent(parent.getContext(), DetailActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("id", dataList.get("id"));
+                intent.putExtra("name", dataList.get("name"));
+                intent.putExtra("addr", dataList.get("addr"));
+                intent.putExtra("desc", dataList.get("desc"));
+                parent.getContext().startActivity(intent);
+
+            }
+        });
 
         return view;
     }

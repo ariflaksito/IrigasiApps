@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
+import net.ariflaksito.adapter.TabsPagerAdapter;
+
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     private ViewPager viewPager;
@@ -29,8 +31,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         actionBar.addTab(actionBar.newTab().setText("TITIK IRIGASI")
                 .setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText("HISTORY DATA")
-                .setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("INFORMASI")
                 .setTabListener(this));
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
