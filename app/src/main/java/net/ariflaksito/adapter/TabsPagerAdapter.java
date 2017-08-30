@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import net.ariflaksito.irigasiapp.Tab1;
 import net.ariflaksito.irigasiapp.Tab2;
+import net.ariflaksito.irigasiapp.Tab3;
 
 /**
  * Created by ariflaksito on 8/5/17.
@@ -13,7 +14,7 @@ import net.ariflaksito.irigasiapp.Tab2;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int NO_OF_TABS = 2;
+    private static final int NO_OF_TABS = 3;
 
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -25,6 +26,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new Tab1();
             case 1:
+                return new Tab3();
+            case 2:
                 return new Tab2();
         }
 

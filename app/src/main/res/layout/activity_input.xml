@@ -55,6 +55,23 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <ImageView
+            android:id="@+id/imgFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
+        <TextView
+            android:id="@+id/txtFoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Ambil Foto"
+            android:textAlignment="center"
+            tools:text="Ambil Foto" />
+
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"

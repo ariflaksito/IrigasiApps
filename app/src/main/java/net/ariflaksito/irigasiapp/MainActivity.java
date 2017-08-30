@@ -30,7 +30,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.addTab(actionBar.newTab().setText("TITIK IRIGASI")
                 .setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setText("HISTORY DATA")
+        actionBar.addTab(actionBar.newTab().setText("MAP")
+                .setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setText("HISTORY")
                 .setTabListener(this));
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
