@@ -72,6 +72,9 @@ public class AdapterLocation extends BaseAdapter {
                 intent.putExtra("name", dataList.get("name"));
                 intent.putExtra("addr", dataList.get("addr"));
                 intent.putExtra("desc", dataList.get("desc"));
+                intent.putExtra("lat", dataList.get("lat"));
+                intent.putExtra("lon", dataList.get("lon"));
+
                 parent.getContext().startActivity(intent);
 
             }

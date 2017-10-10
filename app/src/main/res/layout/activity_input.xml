@@ -55,6 +55,14 @@
 
         </android.support.design.widget.TextInputLayout>
 
+
+        <CheckBox
+            android:id="@+id/banjir"
+            style="@android:style/Widget.Holo.CompoundButton.CheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apakah banjir?" />
+
         <ImageView
             android:id="@+id/imgFoto"
             android:layout_width="match_parent"

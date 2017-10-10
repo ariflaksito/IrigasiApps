@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ public class InputActivity extends ActionBarActivity {
 
         final EditText tgg = (EditText) findViewById(R.id.input_data1);
         final EditText ket = (EditText) findViewById(R.id.input_data2);
+        final CheckBox bjr = (CheckBox) findViewById(R.id.banjir);
 
         ImageView imgFoto = (ImageView) findViewById(R.id.imgFoto);
         imgFoto.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +84,10 @@ public class InputActivity extends ActionBarActivity {
             public void onClick(View v) {
                 JSONObject jsdata = new JSONObject();
                 try {
-                    jsdata.put("uid", "1");
-                    jsdata.put("irigasiid", "2");
-                    jsdata.put("tinggi", tgg.getText().toString());
-                    jsdata.put("is_banjir", "0");
+                    jsdata.put("aid", id);
+//                    jsdata.put("irigasiid", "2");
+                    jsdata.put("tgg", tgg.getText().toString());
+                    jsdata.put("fld", (bjr.isChecked())?"1":"0");
                     jsdata.put("ket", ket.getText().toString());
 
                 } catch (JSONException e) {

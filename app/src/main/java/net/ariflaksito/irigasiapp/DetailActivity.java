@@ -38,6 +38,8 @@ public class DetailActivity extends ActionBarActivity {
         final String name = getIntent().getExtras().getString("name");
         final String addr = getIntent().getExtras().getString("addr");
         final String desc = getIntent().getExtras().getString("desc");
+        final String lat = getIntent().getExtras().getString("lat");
+        final String lon = getIntent().getExtras().getString("lon");
 
         TextView textName = (TextView) findViewById(R.id.textName);
         textName.setText(name);

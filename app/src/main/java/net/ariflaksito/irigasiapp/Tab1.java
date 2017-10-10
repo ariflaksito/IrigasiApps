@@ -56,6 +56,8 @@ public class Tab1 extends ListFragment {
                     loc.put("name", jsObj.getString("irigasi"));
                     loc.put("addr", jsObj.getString("desa")+", "+jsObj.getString("kecamatan"));
                     loc.put("desc", (jsObj.getString("type").equals("1"))?"Pintu Irigasi":"Saluran Irigasi");
+                    loc.put("lat", jsObj.getString("latitude"));
+                    loc.put("lon", jsObj.getString("longitude"));
 
                     dataLocation.add(loc);
 
