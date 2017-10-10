@@ -58,10 +58,12 @@
 
         <CheckBox
             android:id="@+id/banjir"
-            style="@android:style/Widget.Holo.CompoundButton.CheckBox"
+            style="@android:style/Widget.Material.CompoundButton.CheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Apakah banjir?" />
+            android:checked="false"
+            android:text="Apakah banjir?"
+            app:buttonTint="@color/backgroundColor" />
 
         <ImageView
             android:id="@+id/imgFoto"

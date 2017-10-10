@@ -93,12 +93,16 @@ public class DetailActivity extends ActionBarActivity {
                     @Override
                     public void run() {
                         textLoading.setVisibility(VISIBLE);
-                        if(finalLen <=50) {
+                        if(finalLen <=600) {
                             loading.setVisibility(View.GONE);
                             btnGo.setVisibility(VISIBLE);
                             textLoading.setText("Anda sudah berada di lokasi dengan jarak "+ finalLen +" meter");
                         }else{
-                            
+                            btnCek.setVisibility(VISIBLE);
+                            loading.setVisibility(View.GONE);
+                            textLoading.setTextColor(Color.RED);
+                            textLoading.setText("Anda berada pada jarak "+finalLen+" meter yang belum sesuai dengan lokasi, " +
+                                    "silahkan menuju lokasi sampai dengan 50 meter dan tekan tombol Cek Lokasi");
                         }
                     }
                 }, 3000);
