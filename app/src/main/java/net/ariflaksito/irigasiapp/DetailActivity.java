@@ -3,6 +3,7 @@ package net.ariflaksito.irigasiapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import net.ariflaksito.lib.GPSTracker;
 
 import static android.view.View.VISIBLE;
 
@@ -32,7 +35,9 @@ public class DetailActivity extends ActionBarActivity {
         actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimaryDark)));
 
         setContentView(R.layout.activity_detail);
-
+        double latitude;
+        double longitude;
+        float len = 100;
 
         final String id = getIntent().getExtras().getString("id");
         final String name = getIntent().getExtras().getString("name");
@@ -40,6 +45,25 @@ public class DetailActivity extends ActionBarActivity {
         final String desc = getIntent().getExtras().getString("desc");
         final String lat = getIntent().getExtras().getString("lat");
         final String lon = getIntent().getExtras().getString("lon");
+
+        GPSTracker gps = new GPSTracker(this);
+        if(gps.canGetLocation()){
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+            Location loc = new Location("");
+            loc.setLatitude(latitude);
+            loc.setLongitude(longitude);
+
+            Location dst = new Location("");
+            dst.setLatitude(Double.parseDouble(lat));
+            dst.setLongitude(Double.parseDouble(lon));
+
+            len = loc.distanceTo(dst);
+
+        }else{
+            gps.showSettingsAlert();
+        }
 
         TextView textName = (TextView) findViewById(R.id.textName);
         textName.setText(name);
@@ -56,6 +80,7 @@ public class DetailActivity extends ActionBarActivity {
         final ProgressBar loading = (ProgressBar) findViewById(R.id.progressBar);
 
         final Button btnCek = (Button) findViewById(R.id.btnCek);
+        final float finalLen = len;
         btnCek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,16 +93,12 @@ public class DetailActivity extends ActionBarActivity {
                     @Override
                     public void run() {
                         textLoading.setVisibility(VISIBLE);
-                        if(id.equals("1")) {
+                        if(finalLen <=50) {
                             loading.setVisibility(View.GONE);
                             btnGo.setVisibility(VISIBLE);
-                            textLoading.setText("Anda sudah berada di lokasi dengan jarak 15.4 meter");
+                            textLoading.setText("Anda sudah berada di lokasi dengan jarak "+ finalLen +" meter");
                         }else{
-                            btnCek.setVisibility(VISIBLE);
-                            loading.setVisibility(View.GONE);
-                            textLoading.setTextColor(Color.RED);
-                            textLoading.setText("Anda belum berada pada jarak yang sesuai dengan lokasi, " +
-                                    "silahkan menuju lokasi dan tekan tombol Cek Lokasi");
+                            
                         }
                     }
                 }, 3000);
@@ -100,4 +121,5 @@ public class DetailActivity extends ActionBarActivity {
         });
 
     }
+
 }
