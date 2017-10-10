@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.ariflaksito.lib.AccessApi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,12 +61,10 @@ public class Tab3 extends Fragment {
             e.printStackTrace();
         }
 
+        String locations = null;
         GetData loc = new GetData();
         try {
-            String out = loc.execute().get();
-
-
-
+            locations = loc.execute().get();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -73,27 +72,34 @@ public class Tab3 extends Fragment {
             e.printStackTrace();
         }
 
+        final String finalLocations = locations;
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                gmap = googleMap;
-                LatLng point1 = new LatLng(-7.8099, 110.448);
-                LatLng point2 = new LatLng(-7.8204, 110.452);
 
-                gmap.setMyLocationEnabled(true);
-                CameraPosition cp = new CameraPosition.Builder().target(point1).zoom(14).build();
-                gmap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+                try {
+                    JSONObject jsObj = new JSONObject(finalLocations);
+                    JSONArray jsIrg = jsObj.getJSONArray("data");
 
-                // Create Marker
-                gmap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.placeholder))
-                        .title("Irigasi Semoyo").snippet("Semoyo, Berbah, Sleman")
-                    .position(point1));
+                    gmap = googleMap;
+                    for(int i = 0; i< jsIrg.length(); i++) {
+                        JSONObject js = jsIrg.getJSONObject(i);
+                        LatLng point = new LatLng(js.getDouble("latitude"), js.getDouble("longitude"));
 
-                gmap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.placeholder))
-                        .title("Irigasi Kucir").snippet("Pendem, Berbah, Sleman")
-                        .position(point2));
+                        gmap.setMyLocationEnabled(true);
+                        CameraPosition cp = new CameraPosition.Builder().target(point).zoom(12).build();
+                        gmap.animateCamera(CameraUpdateFactory.newCameraPosition(cp));
+
+                        // Create Marker
+                        gmap.addMarker(new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.placeholder))
+                                .title(js.getString("nama")).snippet(js.getString("desa")+", "+js.getString("kecamatan"))
+                                .position(point));
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
 
             }
         });
