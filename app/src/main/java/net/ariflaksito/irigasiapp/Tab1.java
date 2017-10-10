@@ -24,8 +24,8 @@ import java.util.HashMap;
 
 public class Tab1 extends ListFragment {
 
-    private String data = "[{'id': 1, 'name': 'Lokasi 1', 'addr': 'Sebelah barat Sungai', 'desc': 'Last: 08/10/2017 14:41'}," +
-            "{'id': 2, 'name': 'Lokasi 2', 'addr': 'Sebelah timur Sungai', 'desc': 'Last: 08/08/2017 08:52'}]";
+    private String data = "[{'id': 1, 'name': 'Irigasi Semoyo', 'addr': 'Semoyo, Berbah, Sleman', 'desc': 'Last: 08/10/2017 14:41'}," +
+            "{'id': 2, 'name': 'Irigasi Kucir', 'addr': 'Pendem, Berbah, Sleman', 'desc': 'Last: 08/08/2017 08:52'}]";
 
     private ArrayList<HashMap<String, String>> dataLocation;
     private ListView lview;

@@ -1,8 +1,12 @@
 package net.ariflaksito.irigasiapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import net.ariflaksito.lib.AccessApi;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by ariflaksito on 8/5/17.
  */
@@ -25,6 +36,11 @@ public class Tab3 extends Fragment {
 
     private MapView mapView;
     private GoogleMap gmap;
+    private Context cx;
+
+    public Tab3(Context c){
+        cx = c;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -44,12 +60,25 @@ public class Tab3 extends Fragment {
             e.printStackTrace();
         }
 
+        GetData loc = new GetData();
+        try {
+            String out = loc.execute().get();
+
+
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 gmap = googleMap;
-                LatLng point1 = new LatLng(-7.7579287, 110.4083342);
-                LatLng point2 = new LatLng(-7.754134, 110.413205);
+                LatLng point1 = new LatLng(-7.8099, 110.448);
+                LatLng point2 = new LatLng(-7.8204, 110.452);
 
                 gmap.setMyLocationEnabled(true);
                 CameraPosition cp = new CameraPosition.Builder().target(point1).zoom(14).build();
@@ -58,18 +87,44 @@ public class Tab3 extends Fragment {
                 // Create Marker
                 gmap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.placeholder))
-                        .title("Lokasi 1").snippet("Sebelah barat Sungai")
+                        .title("Irigasi Semoyo").snippet("Semoyo, Berbah, Sleman")
                     .position(point1));
 
                 gmap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.mipmap.placeholder))
-                        .title("Lokasi 2").snippet("Sebelah timur Sungai")
+                        .title("Irigasi Kucir").snippet("Pendem, Berbah, Sleman")
                         .position(point2));
 
             }
         });
 
         return rootView;
+    }
+
+    public class GetData extends AsyncTask<String, String, String>{
+        String msg;
+        private ProgressDialog dialog = new ProgressDialog(cx);
+
+        public GetData() {
+            msg = "ERROR: Tidak dapat mengirim data, periksa koneksi jaringan anda";
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            AccessApi api = new AccessApi(cx);
+            api.irigasi();
+
+            return api.getOutput();
+        }
+
+        protected void onPreExecute() {
+            dialog.setMessage("Proses ambil data..");
+            dialog.show();
+        }
+
+        protected void onPostExecute(String result) {
+            dialog.dismiss();
+        }
     }
 
     @Override

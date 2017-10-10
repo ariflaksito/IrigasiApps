@@ -2,12 +2,14 @@ package net.ariflaksito.irigasiapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +17,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import net.ariflaksito.lib.AccessApi;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by ariflaksito on 8/12/17.
@@ -46,6 +56,9 @@ public class InputActivity extends ActionBarActivity {
         TextView textName = (TextView) findViewById(R.id.textName);
         textName.setText(name);
 
+        final EditText tgg = (EditText) findViewById(R.id.input_data1);
+        final EditText ket = (EditText) findViewById(R.id.input_data2);
+
         ImageView imgFoto = (ImageView) findViewById(R.id.imgFoto);
         imgFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +73,27 @@ public class InputActivity extends ActionBarActivity {
                 android.util.Log.i(getApplicationContext().getPackageName(), hasCamera);
 
 
+            }
+        });
+
+        Button btnSave = (Button) findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject jsdata = new JSONObject();
+                try {
+                    jsdata.put("uid", "1");
+                    jsdata.put("irigasiid", "2");
+                    jsdata.put("tinggi", tgg.getText().toString());
+                    jsdata.put("is_banjir", "0");
+                    jsdata.put("ket", ket.getText().toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //android.util.Log.i("--string--", jsdata.toString());
+                new PostData().execute(jsdata.toString());
             }
         });
 
@@ -120,6 +154,43 @@ public class InputActivity extends ActionBarActivity {
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public class PostData extends AsyncTask<String, String, Boolean>{
+        String msg;
+        private ProgressDialog dialog = new ProgressDialog(
+                InputActivity.this);
+
+        public PostData() {
+            msg = "ERROR: Tidak dapat mengirim data, periksa koneksi jaringan anda";
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean rs = false;
+
+            AccessApi api = new AccessApi(InputActivity.this);
+            rs = api.postData(params);
+            return rs;
+        }
+
+        protected void onPreExecute() {
+            dialog.setMessage("Proses mengirim data..");
+            dialog.show();
+        }
+
+        protected void onPostExecute(Boolean result) {
+            dialog.dismiss();
+            if (result) {
+                Toast.makeText(InputActivity.this,
+                        "Data berhasil dikirim ke server", Toast.LENGTH_SHORT)
+                        .show();
+                finish();
+            } else {
+                Toast.makeText(InputActivity.this, msg, Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
     }
 

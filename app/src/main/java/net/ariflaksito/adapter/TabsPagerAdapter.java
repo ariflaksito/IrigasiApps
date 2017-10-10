@@ -1,5 +1,6 @@
 package net.ariflaksito.adapter;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,9 +16,11 @@ import net.ariflaksito.irigasiapp.Tab3;
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NO_OF_TABS = 3;
+    private Context cx;
 
-    public TabsPagerAdapter(FragmentManager fm) {
+    public TabsPagerAdapter(FragmentManager fm, Context cx) {
         super(fm);
+        this.cx = cx;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new Tab1();
             case 1:
-                return new Tab3();
+                return new Tab3(cx);
             case 2:
                 return new Tab2();
         }

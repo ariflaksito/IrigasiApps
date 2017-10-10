@@ -1,5 +1,6 @@
 package net.ariflaksito.irigasiapp;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -20,11 +21,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
         actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimaryDark)));
 
-        adapter = new TabsPagerAdapter(getSupportFragmentManager());
+        adapter = new TabsPagerAdapter(getSupportFragmentManager(), MainActivity.this);
 
         viewPager.setAdapter(adapter);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

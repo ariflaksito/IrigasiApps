@@ -23,6 +23,8 @@ import java.util.HashMap;
 
 public class Tab2 extends ListFragment {
 
+
+
     private String data = "[{'id': 1, 'loc': 'Lokasi 1', 'date': '08/13/2017 13:51', 'data1': '25.3'}," +
             "{'id': 2, 'loc': 'Lokasi 1', 'date': '08/13/2017 17:04', 'data1': '25.52'}," +
             "{'id': 3, 'loc': 'Lokasi 2', 'date': '08/13/2017 17:23', 'data1': '17.29'}]";
