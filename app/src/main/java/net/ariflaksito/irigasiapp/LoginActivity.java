@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import net.ariflaksito.lib.AccessApi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,6 +101,7 @@ public class LoginActivity extends Activity {
 
                 if(status){
                     JSONObject jsUsr = js.getJSONObject("data");
+                    JSONArray jsIrg = js.getJSONArray("irigasi");
 
                     SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
                     SharedPreferences.Editor edit = pref.edit();
@@ -109,6 +111,7 @@ public class LoginActivity extends Activity {
                     edit.putString("name", jsUsr.getString("nama"));
                     edit.putString("addr", jsUsr.getString("alamat"));
                     edit.putString("hp", jsUsr.getString("hp"));
+                    edit.putString("irigasi", jsIrg.toString());
 
                     edit.commit();
 

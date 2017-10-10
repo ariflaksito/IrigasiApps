@@ -1,5 +1,7 @@
 package net.ariflaksito.irigasiapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -24,11 +26,16 @@ import java.util.HashMap;
 
 public class Tab1 extends ListFragment {
 
-    private String data = "[{'id': 1, 'name': 'Irigasi Semoyo', 'addr': 'Semoyo, Berbah, Sleman', 'desc': 'Last: 08/10/2017 14:41'}," +
-            "{'id': 2, 'name': 'Irigasi Kucir', 'addr': 'Pendem, Berbah, Sleman', 'desc': 'Last: 08/08/2017 08:52'}]";
-
+    private String data;
     private ArrayList<HashMap<String, String>> dataLocation;
     private ListView lview;
+    private Context cx;
+
+    public Tab1(Context cx) {
+        this.cx = cx;
+        SharedPreferences pref = cx.getSharedPreferences("MyPref", 0);
+        data = pref.getString("irigasi","");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,10 +52,10 @@ public class Tab1 extends ListFragment {
                     JSONObject jsObj = jsArray.getJSONObject(i);
 
                     HashMap<String, String> loc = new HashMap<>();
-                    loc.put("id", jsObj.getString("id"));
-                    loc.put("name", jsObj.getString("name"));
-                    loc.put("addr", jsObj.getString("addr"));
-                    loc.put("desc", jsObj.getString("desc"));
+                    loc.put("id", jsObj.getString("aid"));
+                    loc.put("name", jsObj.getString("irigasi"));
+                    loc.put("addr", jsObj.getString("desa")+", "+jsObj.getString("kecamatan"));
+                    loc.put("desc", (jsObj.getString("type").equals("1"))?"Pintu Irigasi":"Saluran Irigasi");
 
                     dataLocation.add(loc);
 

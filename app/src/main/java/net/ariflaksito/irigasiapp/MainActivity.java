@@ -1,5 +1,6 @@
 package net.ariflaksito.irigasiapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import net.ariflaksito.adapter.TabsPagerAdapter;
 
@@ -20,8 +23,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getSupportActionBar();
@@ -68,5 +69,29 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.profile:
+                return(true);
+            case R.id.about:
+                return(true);
+            case R.id.logout:
+                getApplicationContext().getSharedPreferences("MyPref", 0).edit().clear().commit();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+
+                finish();
+                return(true);
+        }
+        return(super.onOptionsItemSelected(item));
     }
 }

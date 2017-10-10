@@ -27,7 +27,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new Tab1();
+                return new Tab1(cx);
             case 1:
                 return new Tab3(cx);
             case 2:
