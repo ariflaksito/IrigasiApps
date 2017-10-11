@@ -31,7 +31,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new Tab3(cx);
             case 2:
-                return new Tab2();
+                return new Tab2(cx);
         }
 
         return null;

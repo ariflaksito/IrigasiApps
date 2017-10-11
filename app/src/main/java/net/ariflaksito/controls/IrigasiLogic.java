@@ -29,7 +29,7 @@ public class IrigasiLogic implements InIrigasi {
         ContentValues values = new ContentValues();
 
         values.put("iid", i.getIid());
-        values.put("name", i.getIname());
+        values.put("iname", i.getIname());
         values.put("addr", i.getAddr());
         values.put("lat", i.getLat());
         values.put("lon", i.getLon());

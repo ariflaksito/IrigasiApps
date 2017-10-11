@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBClass extends SQLiteOpenHelper {
 
     public DBClass(Context context) {
-        super(context, "dbirigasi", null, 1);
+        super(context, "dbirigasi", null, 2);
     }
 
     @Override
@@ -26,13 +26,16 @@ public class DBClass extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE if not exists data "
                 + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "aid INTEGER, name TEXT, img TEXT, "
-                + "postdate DATETIME, tinggi DOUBLE, banjir INT, desc TEXT);");
+                + "postdate DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                + "tinggi DOUBLE, banjir INT, desc TEXT);");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS irigasi");
+        db.execSQL("DROP TABLE IF EXISTS data");
+        onCreate(db);
 
     }
 

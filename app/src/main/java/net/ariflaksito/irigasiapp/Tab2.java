@@ -1,5 +1,6 @@
 package net.ariflaksito.irigasiapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.widget.ListView;
 
 import net.ariflaksito.adapter.AdapterHistory;
 import net.ariflaksito.adapter.AdapterLocation;
+import net.ariflaksito.controls.DataLogic;
+import net.ariflaksito.models.Data;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +19,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ariflaksito on 8/5/17.
@@ -23,14 +27,14 @@ import java.util.HashMap;
 
 public class Tab2 extends ListFragment {
 
-
-
-    private String data = "[{'id': 1, 'loc': 'Lokasi 1', 'date': '08/13/2017 13:51', 'data1': '25.3'}," +
-            "{'id': 2, 'loc': 'Lokasi 1', 'date': '08/13/2017 17:04', 'data1': '25.52'}," +
-            "{'id': 3, 'loc': 'Lokasi 2', 'date': '08/13/2017 17:23', 'data1': '17.29'}]";
+    private Context cx;
 
     private ArrayList<HashMap<String, String>> dataHistory;
     private ListView lview;
+
+    public Tab2(Context c){
+        cx = c;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,28 +42,22 @@ public class Tab2 extends ListFragment {
             return null;
         }
 
+        DataLogic ldata = new DataLogic(cx);
+        List<Data> dx = ldata.get();
+
         dataHistory = new ArrayList<>();
 
-        if(data != null){
-            try {
-                JSONArray jsArray = new JSONArray(data);
-                for(int i = 0; i< jsArray.length(); i++){
-                    JSONObject jsObj = jsArray.getJSONObject(i);
+        for(Data d : dx){
+            HashMap<String, String> loc = new HashMap<>();
 
-                    HashMap<String, String> loc = new HashMap<>();
-                    loc.put("id", jsObj.getString("id"));
-                    loc.put("loc", jsObj.getString("loc"));
-                    loc.put("date", jsObj.getString("date"));
-                    loc.put("data1", jsObj.getString("data1"));
+            android.util.Log.d("--irigasiApp--", d.getName());
 
-                    dataHistory.add(loc);
+            loc.put("id", d.getAid()+"");
+            loc.put("loc", d.getName());
+            loc.put("date", d.getPostDate().toString());
+            loc.put("data1", d.getTinggi()+"");
 
-                }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            dataHistory.add(loc);
         }
 
         View rootView = inflater.inflate(R.layout.list_fragment, null);

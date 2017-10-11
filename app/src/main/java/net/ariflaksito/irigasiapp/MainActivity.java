@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import net.ariflaksito.adapter.TabsPagerAdapter;
+import net.ariflaksito.controls.DataLogic;
+import net.ariflaksito.controls.IrigasiLogic;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -85,6 +87,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             case R.id.about:
                 return(true);
             case R.id.logout:
+                IrigasiLogic irigasiLogic = new IrigasiLogic(getApplicationContext());
+                irigasiLogic.remove();
+
+                DataLogic dataLogic = new DataLogic(getApplicationContext());
+                dataLogic.remove();
+
                 getApplicationContext().getSharedPreferences("MyPref", 0).edit().clear().commit();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);

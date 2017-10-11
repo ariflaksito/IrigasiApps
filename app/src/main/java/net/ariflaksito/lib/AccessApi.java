@@ -14,7 +14,8 @@ import android.content.Context;
 
 public class AccessApi {
 
-    String uri = "http://192.168.8.101/irigasi-web/api/";
+    String uri = "http://10.0.2.2/irigasi-web/api/";
+//    String uri = "http://192.168.8.102/irigasi-web/api/";
     Context context;
     String out;
 

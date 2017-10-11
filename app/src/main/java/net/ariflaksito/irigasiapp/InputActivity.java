@@ -24,7 +24,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.ariflaksito.controls.DataLogic;
 import net.ariflaksito.lib.AccessApi;
+import net.ariflaksito.models.Data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,7 +87,7 @@ public class InputActivity extends ActionBarActivity {
                 JSONObject jsdata = new JSONObject();
                 try {
                     jsdata.put("aid", id);
-//                    jsdata.put("irigasiid", "2");
+                    jsdata.put("name", name);
                     jsdata.put("tgg", tgg.getText().toString());
                     jsdata.put("fld", (bjr.isChecked())?"1":"0");
                     jsdata.put("ket", ket.getText().toString());
@@ -94,7 +96,6 @@ public class InputActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-                //android.util.Log.i("--string--", jsdata.toString());
                 new PostData().execute(jsdata.toString());
             }
         });
@@ -161,6 +162,7 @@ public class InputActivity extends ActionBarActivity {
 
     public class PostData extends AsyncTask<String, String, Boolean>{
         String msg;
+        String[] vars;
         private ProgressDialog dialog = new ProgressDialog(
                 InputActivity.this);
 
@@ -171,6 +173,7 @@ public class InputActivity extends ActionBarActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             boolean rs = false;
+            vars = params;
 
             AccessApi api = new AccessApi(InputActivity.this);
             rs = api.postData(params);
@@ -189,6 +192,25 @@ public class InputActivity extends ActionBarActivity {
                         "Data berhasil dikirim ke server", Toast.LENGTH_SHORT)
                         .show();
                 finish();
+
+                try {
+                    DataLogic ldata = new DataLogic(getApplicationContext());
+                    JSONObject jsObj = new JSONObject(vars[0]);
+
+                    Data d = new Data() {};
+
+                    d.setAid(jsObj.getInt("aid"));
+                    d.setName(jsObj.getString("name"));
+                    d.setTinggi(Double.parseDouble(jsObj.getString("tgg")));
+                    d.setBanjir(jsObj.getInt("fld"));
+                    d.setDesc(jsObj.getString("ket"));
+
+                    ldata.add(d);
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
             } else {
                 Toast.makeText(InputActivity.this, msg, Toast.LENGTH_SHORT)
                         .show();

@@ -21,12 +21,16 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import net.ariflaksito.controls.IrigasiLogic;
 import net.ariflaksito.lib.AccessApi;
+import net.ariflaksito.models.Irigasi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -61,30 +65,17 @@ public class Tab3 extends Fragment {
             e.printStackTrace();
         }
 
-        String locations = null;
-        GetData loc = new GetData();
-        try {
-            locations = loc.execute().get();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        final String finalLocations = locations;
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
 
-                try {
-                    JSONObject jsObj = new JSONObject(finalLocations);
-                    JSONArray jsIrg = jsObj.getJSONArray("data");
+                IrigasiLogic idata = new IrigasiLogic(cx);
+                List<Irigasi> data = idata.get();
 
                     gmap = googleMap;
-                    for(int i = 0; i< jsIrg.length(); i++) {
-                        JSONObject js = jsIrg.getJSONObject(i);
-                        LatLng point = new LatLng(js.getDouble("latitude"), js.getDouble("longitude"));
+                    for(int i = 0; i< data.size(); i++) {
+                        Irigasi irigasi = data.get(i);
+                        LatLng point = new LatLng(irigasi.getLat(), irigasi.getLon());
 
                         gmap.setMyLocationEnabled(true);
                         CameraPosition cp = new CameraPosition.Builder().target(point).zoom(12).build();
@@ -93,13 +84,11 @@ public class Tab3 extends Fragment {
                         // Create Marker
                         gmap.addMarker(new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.placeholder))
-                                .title(js.getString("nama")).snippet(js.getString("desa")+", "+js.getString("kecamatan"))
+                                .title(irigasi.getIname()).snippet(irigasi.getAddr())
                                 .position(point));
                     }
 
-                }catch (JSONException e){
-                    e.printStackTrace();
-                }
+
 
             }
         });
@@ -107,31 +96,7 @@ public class Tab3 extends Fragment {
         return rootView;
     }
 
-    public class GetData extends AsyncTask<String, String, String>{
-        String msg;
-        private ProgressDialog dialog = new ProgressDialog(cx);
 
-        public GetData() {
-            msg = "ERROR: Tidak dapat mengirim data, periksa koneksi jaringan anda";
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            AccessApi api = new AccessApi(cx);
-            api.irigasi();
-
-            return api.getOutput();
-        }
-
-        protected void onPreExecute() {
-            dialog.setMessage("Proses ambil data..");
-            dialog.show();
-        }
-
-        protected void onPostExecute(String result) {
-            dialog.dismiss();
-        }
-    }
 
     @Override
     public void onResume() {

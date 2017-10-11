@@ -1,6 +1,6 @@
 package net.ariflaksito.models;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 /**
  * Created by ariflaksito on 10/11/17.

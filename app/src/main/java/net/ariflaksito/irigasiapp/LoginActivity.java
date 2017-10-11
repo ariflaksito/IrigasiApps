@@ -14,7 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.ariflaksito.controls.DataLogic;
+import net.ariflaksito.controls.IrigasiLogic;
 import net.ariflaksito.lib.AccessApi;
+import net.ariflaksito.models.Irigasi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,6 +117,25 @@ public class LoginActivity extends Activity {
                     edit.putString("irigasi", jsIrg.toString());
 
                     edit.commit();
+
+                    IrigasiLogic idata = new IrigasiLogic(getApplicationContext());
+                    Irigasi irigasi = new Irigasi(){};
+
+                    idata.remove();
+
+                    JSONArray jsMap = js.getJSONArray("map");
+                    for(int i=0; i<jsMap.length(); i++){
+                        JSONObject jsDataMap = jsMap.getJSONObject(i);
+
+                        irigasi.setIid(jsDataMap.getInt("irigasiid"));
+                        irigasi.setIname(jsDataMap.getString("nama"));
+                        irigasi.setAddr(jsDataMap.getString("desa")+", "+jsDataMap.getString("kecamatan"));
+                        irigasi.setLat(jsDataMap.getDouble("latitude"));
+                        irigasi.setLon(jsDataMap.getDouble("longitude"));
+
+                        idata.add(irigasi);
+
+                    }
 
                 }
 
