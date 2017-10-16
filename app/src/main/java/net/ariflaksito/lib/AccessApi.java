@@ -8,18 +8,20 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import net.ariflaksito.models.Config;
+
 /**
  * Created by ariflaksito on 9/27/17.
  */
 
 public class AccessApi {
 
-    String uri = "http://10.0.2.2/irigasi-web/api/";
-//    String uri = "http://192.168.8.102/irigasi-web/api/";
+    String uri;
     Context context;
     String out;
 
     public AccessApi(Context c) {
+        uri = new Config().getUrlServer();
         context = c;
     }
 

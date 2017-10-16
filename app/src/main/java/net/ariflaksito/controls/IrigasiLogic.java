@@ -58,7 +58,8 @@ public class IrigasiLogic implements InIrigasi {
         List<Irigasi> list = new ArrayList<Irigasi>();
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cur = db.rawQuery("Select _id, iid, iname, addr, lat, lon from irigasi", null);
+        Cursor cur = db.rawQuery("Select _id, iid, iname, addr, lat, lon from irigasi " +
+                "Order by iid", null);
 
         if (cur.moveToFirst()) {
             do {

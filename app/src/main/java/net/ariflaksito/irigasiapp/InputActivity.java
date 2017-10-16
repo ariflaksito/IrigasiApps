@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
@@ -31,16 +34,27 @@ import net.ariflaksito.models.Data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+
 /**
  * Created by ariflaksito on 8/12/17.
  */
 
 public class InputActivity extends ActionBarActivity {
 
-    private static final int MY_REQUEST_CODE = 0;
-    private static final int CAMERA_REQUEST = 100;
     private ActionBar actionBar;
-    private Camera camera;
+    private static String IMAGE_DIRECTORY_NAME = "IrigasiApp";
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+
+    private String id, name;
+    private EditText tgg, ket;
+    private CheckBox bjr;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,31 +65,22 @@ public class InputActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_input);
 
-        final String id = getIntent().getExtras().getString("id");
-        final String name = getIntent().getExtras().getString("name");
-        final String addr = getIntent().getExtras().getString("addr");
-        final String desc = getIntent().getExtras().getString("desc");
+        id = getIntent().getExtras().getString("id");
+        name = getIntent().getExtras().getString("name");
 
         TextView textName = (TextView) findViewById(R.id.textName);
         textName.setText(name);
 
-        final EditText tgg = (EditText) findViewById(R.id.input_data1);
-        final EditText ket = (EditText) findViewById(R.id.input_data2);
-        final CheckBox bjr = (CheckBox) findViewById(R.id.banjir);
+        tgg = (EditText) findViewById(R.id.input_data1);
+        ket = (EditText) findViewById(R.id.input_data2);
+        bjr = (CheckBox) findViewById(R.id.banjir);
 
         ImageView imgFoto = (ImageView) findViewById(R.id.imgFoto);
         imgFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String hasCamera = "check";
-                if(checkCameraHardware(getApplicationContext())){
-                    checksCameraPermission();
-
-                }
-                    
-                android.util.Log.i(getApplicationContext().getPackageName(), hasCamera);
-
+                captureImage();
 
             }
         });
@@ -102,62 +107,21 @@ public class InputActivity extends ActionBarActivity {
 
     }
 
-    private boolean checkCameraHardware(Context context) {
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            return true;
-        } else {
-            return false;
-        }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save file url in bundle as it will be null on screen orientation
+        // changes
+        outState.putParcelable("file_uri", fileUri);
     }
 
-    private void checksCameraPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
 
-            if (this.checkSelfPermission(Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA},
-                        MY_REQUEST_CODE);
-
-                if (! shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                    showMessageOKCancel("You need to allow camera usage",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(InputActivity.this, new String[] {Manifest.permission.CAMERA},
-                                            MY_REQUEST_CODE);
-                                }
-                            });
-                }
-            }
-            else {
-                accessCamera();
-
-            }
-        }
-        else {
-            accessCamera();
-        }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
-    private void accessCamera(){
-        try {
-            Intent cameraIntent = new Intent(
-                    android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
     }
 
     public class PostData extends AsyncTask<String, String, Boolean>{
@@ -218,4 +182,84 @@ public class InputActivity extends ActionBarActivity {
         }
     }
 
+    private void captureImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri();
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+    }
+
+    public Uri getOutputMediaFileUri() {
+        return Uri.fromFile(getOutputMediaFile());
+    }
+
+    private static File getOutputMediaFile() {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                android.util.Log.d("--irigasiApp--", "Oops! Failed create "
+                        + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+
+
+        return mediaFile;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // if the result is capturing Image
+        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                launchUploadActivity();
+
+            } else if (resultCode == RESULT_CANCELED) {
+
+                // user cancelled Image capture
+                Toast.makeText(getApplicationContext(),
+                        "User cancelled image capture", Toast.LENGTH_SHORT)
+                        .show();
+
+            } else {
+                // failed to capture image
+                Toast.makeText(getApplicationContext(),
+                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+        }
+    }
+
+    private void launchUploadActivity(){
+
+        Intent i = new Intent(InputActivity.this, UploadActivity.class);
+        i.putExtra("filePath", fileUri.getPath());
+        i.putExtra("aid", id);
+        i.putExtra("name", name);
+        i.putExtra("tgg", tgg.getText().toString());
+        i.putExtra("fld", (bjr.isChecked())?"1":"0");
+        i.putExtra("ket", ket.getText().toString());
+
+        startActivity(i);
+    }
 }

@@ -82,9 +82,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.profile:
-                return(true);
-            case R.id.about:
+            case R.id.lapor:
+                Intent in = new Intent(MainActivity.this, LaporActivity.class);
+                startActivity(in);
+
                 return(true);
             case R.id.logout:
                 IrigasiLogic irigasiLogic = new IrigasiLogic(getApplicationContext());
