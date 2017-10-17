@@ -6,13 +6,13 @@ package net.ariflaksito.models;
 
 public class Config {
 
-    private String uri = "http://192.168.8.102/irigasi-web/";
+    private String uri = "http://10.0.2.2/irigasi-web/";
     private String urlServer;
     private String uploadUrl;
 
     public Config(){
         urlServer = uri + "api/";
-        uploadUrl = uri + "upload.php";
+        uploadUrl = uri + "upload/";
     }
 
     public String getUrlServer() {

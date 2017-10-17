@@ -17,8 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.ariflaksito.controls.DataLogic;
 import net.ariflaksito.lib.AndroidMultiPartEntity;
 import net.ariflaksito.models.Config;
+import net.ariflaksito.models.Data;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,8 +28,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,8 +63,6 @@ public class UploadActivity extends AppCompatActivity {
         fld = i.getStringExtra("fld");
         ket = i.getStringExtra("ket");
 
-        android.util.Log.d("--irigasiApp--", filePath);
-
         btnUpload = (Button) findViewById(R.id.btnUpload);
         imgPreview = (ImageView) findViewById(R.id.imgPreview);
 
@@ -69,7 +72,7 @@ public class UploadActivity extends AppCompatActivity {
         TextView txtKet = (TextView) findViewById(R.id.txtKet);
 
         txtName.setText("Irigasi "+name);
-        txtHeight.setText("Ketinggian "+tgg);
+        txtHeight.setText("Ketinggian "+tgg+" cm");
         txtKet.setText(ket);
         txtBanjir.setText((fld.equals("1"))?"Terjadi Banjir":"Tidak Banjir");
 
@@ -159,9 +162,10 @@ public class UploadActivity extends AppCompatActivity {
                 entity.addPart("image", new FileBody(sourceFile));
 
                 // Extra parameters if you want to pass to server
-                //entity.addPart("website",
-                //        new StringBody("www.androidhive.info"));
-                //entity.addPart("email", new StringBody("abc@gmail.com"));
+                entity.addPart("aid", new StringBody(aid));
+                entity.addPart("tinggi", new StringBody(tgg));
+                entity.addPart("flood", new StringBody(fld));
+                entity.addPart("ket", new StringBody(ket));
 
                 totalSize = entity.getContentLength();
                 httppost.setEntity(entity);
@@ -191,8 +195,35 @@ public class UploadActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.e("--irigasiApp--", "Response from server: " + result);
+
+            String msg = null;
+
+            try {
+                JSONObject jsObj = new JSONObject(result);
+                boolean status = jsObj.getBoolean("status");
+                msg = jsObj.getString("msg");
+
+                if(status){
+                    DataLogic ldata = new DataLogic(getApplicationContext());
+                    Data d = new Data() {};
+
+                    d.setAid(Integer.parseInt(aid));
+                    d.setName(name);
+                    d.setTinggi(Double.parseDouble(tgg));
+                    d.setBanjir(Integer.parseInt(fld));
+                    d.setDesc(ket);
+
+                    ldata.add(d);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Toast.makeText(UploadActivity.this, msg, Toast.LENGTH_SHORT).show();
+
             loading.dismiss();
+            finish();
 
             super.onPostExecute(result);
         }

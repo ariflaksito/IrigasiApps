@@ -1,14 +1,10 @@
 package net.ariflaksito.irigasiapp;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -38,8 +34,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 
 /**
  * Created by ariflaksito on 8/12/17.
@@ -183,6 +177,7 @@ public class InputActivity extends ActionBarActivity {
     }
 
     private void captureImage() {
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         fileUri = getOutputMediaFileUri();
@@ -194,7 +189,21 @@ public class InputActivity extends ActionBarActivity {
     }
 
     public Uri getOutputMediaFileUri() {
-        return Uri.fromFile(getOutputMediaFile());
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }else{
+                uri =  Uri.fromFile(getOutputMediaFile());
+            }
+        }else{
+
+            uri =  Uri.fromFile(getOutputMediaFile());
+        }
+
+        return uri;
+
     }
 
     private static File getOutputMediaFile() {
@@ -261,5 +270,6 @@ public class InputActivity extends ActionBarActivity {
         i.putExtra("ket", ket.getText().toString());
 
         startActivity(i);
+        finish();
     }
 }

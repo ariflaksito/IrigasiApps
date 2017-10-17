@@ -35,7 +35,7 @@
                 android:id="@+id/input_data1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Data Ketinggian (meter)"
+                android:hint="Data Ketinggian (cm)"
                 android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
 
