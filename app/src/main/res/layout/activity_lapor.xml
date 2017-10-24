@@ -14,30 +14,37 @@
         android:paddingRight="20dp"
         android:weightSum="1">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="38dp" />
-
-        <EditText
-            android:id="@+id/editText"
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/spinner_irigasi"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="5dp"
-            android:hint="Laporan"
-            android:inputType="textMultiLine" />
+            android:hint="Pilih Irigasi"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/input_lapor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Laporan Detail"
+                android:inputType="textMultiLine" />
+
+        </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnReport"
+        android:text="Kirim Laporan"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kirim"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="134dp" />
+        android:layout_weight="1" />
 
     </LinearLayout>
 

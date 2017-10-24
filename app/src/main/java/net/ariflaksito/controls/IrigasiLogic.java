@@ -49,8 +49,28 @@ public class IrigasiLogic implements InIrigasi {
     }
 
     @Override
-    public String get(String key) {
-        return null;
+    public Irigasi get(int key) {
+        SQLiteDatabase db = database.getWritableDatabase();
+        Cursor cur = db.rawQuery("Select _id, iid, iname, addr, lat, lon from irigasi " +
+                "from irigasi Where _id="+ key, null);
+
+        Irigasi i = new Irigasi() {};
+        if (cur.moveToFirst()) {
+
+            i.set_id(cur.getInt(cur.getColumnIndex("_id")));
+            i.setIid(cur.getInt(cur.getColumnIndex("iid")));
+            i.setIname(cur.getString(cur.getColumnIndex("iname")));
+            i.setAddr(cur.getString(cur.getColumnIndex("addr")));
+            i.setLat(cur.getDouble(cur.getColumnIndex("lat")));
+            i.setLon(cur.getDouble(cur.getColumnIndex("lon")));
+
+        }
+
+        cur.close();
+        db.close();
+
+        return i;
+
     }
 
     @Override

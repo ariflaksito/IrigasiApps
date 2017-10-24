@@ -16,7 +16,7 @@ public interface InIrigasi {
 
     void delete(String key);
 
-    String get(String key);
+    Irigasi get(int key);
 
     List<Irigasi> get();
 }
