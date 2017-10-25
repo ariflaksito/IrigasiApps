@@ -26,31 +26,13 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txtHeight"
+        android:id="@+id/txtDesc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/common_signin_btn_default_background"
         android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/txtKet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/txtBanjir"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnUpload"
@@ -62,5 +44,4 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="Upload dan Simpan" />
-
 </LinearLayout>

@@ -44,9 +44,16 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".UploadActivity" android:label="Upload Foto" />
-        <activity android:name=".LaporActivity" android:label="Input Laporan" />
-        <activity android:name=".ProfileActivity" android:label="Profile Petugas"></activity>
+        <activity
+            android:name=".UploadActivity"
+            android:label="Upload Foto" />
+        <activity
+            android:name=".LaporActivity"
+            android:label="Input Laporan" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="Profile Petugas" />
+        <activity android:name=".UploadReportActivity" android:label="Upload Foto Laporan"></activity>
     </application>
 
 </manifest>

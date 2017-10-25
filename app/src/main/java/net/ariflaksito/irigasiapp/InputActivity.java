@@ -75,7 +75,12 @@ public class InputActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                captureImage();
+                if(!tgg.getText().toString().equals(""))
+                    captureImage();
+                else{
+                    Toast.makeText(InputActivity.this,"Error: Tinggi harus anda isikan dahulu!", Toast.LENGTH_SHORT)
+                            .show();
+                }
 
             }
         });
@@ -280,6 +285,7 @@ public class InputActivity extends ActionBarActivity {
         i.putExtra("name", name);
         i.putExtra("tgg", tgg.getText().toString());
         i.putExtra("fld", (bjr.isChecked())?"1":"0");
+        i.putExtra("type", type);
         i.putExtra("ket", ket.getText().toString());
 
         startActivity(i);

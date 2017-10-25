@@ -4,13 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,47 +30,32 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-public class UploadActivity extends AppCompatActivity {
+public class UploadReportActivity extends AppCompatActivity {
 
     private String filePath = null;
-    private String aid, name, tgg, fld, ket ,type;
+    private String dataJson;
 
     private ImageView imgPreview;
-    private Button btnUpload;
-    long totalSize = 0;
-
     private Bitmap bitmap;
+    long totalSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload);
+        setContentView(R.layout.activity_upload_report);
 
         Intent i = getIntent();
         filePath = i.getStringExtra("filePath");
-        aid = i.getStringExtra("aid");
-        name = i.getStringExtra("name");
-        tgg = i.getStringExtra("tgg");
-        fld = i.getStringExtra("fld");
-        ket = i.getStringExtra("ket");
-        type = i.getStringExtra("type");
+        dataJson = i.getStringExtra("dataJson");
 
-        btnUpload = (Button) findViewById(R.id.btnUpload);
+        Button btnUpload = (Button) findViewById(R.id.btnUpload);
         imgPreview = (ImageView) findViewById(R.id.imgPreview);
 
         TextView txtName = (TextView) findViewById(R.id.txtName);
-        TextView txtHeight = (TextView) findViewById(R.id.txtHeight);
-        TextView txtBanjir = (TextView) findViewById(R.id.txtBanjir);
-        TextView txtKet = (TextView) findViewById(R.id.txtKet);
-
-        txtName.setText("Irigasi "+name);
-        txtHeight.setText("Ketinggian "+tgg+" cm");
-        txtKet.setText(ket);
-        txtBanjir.setText((fld.equals("1"))?"Terjadi Banjir":"Tidak Banjir");
+        TextView txtDesc = (TextView) findViewById(R.id.txtDesc);
 
         if (filePath != null) {
             try {
@@ -87,10 +68,18 @@ public class UploadActivity extends AppCompatActivity {
                     "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
         }
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        try{
+            JSONObject js = new JSONObject(dataJson);
+            txtName.setText(js.getString("name"));
+            txtDesc.setText(js.getString("report"));
 
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 new UploadFileToServer().execute();
             }
         });
@@ -117,7 +106,7 @@ public class UploadActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loading = ProgressDialog.show(UploadActivity.this, "Uploading Image", "Please wait...",true,true);
+            loading = ProgressDialog.show(UploadReportActivity.this, "Uploading Image", "Please wait...",true,true);
         }
 
         @Override
@@ -152,11 +141,15 @@ public class UploadActivity extends AppCompatActivity {
                 // Adding file data to http body
                 entity.addPart("image", new FileBody(sourceFile));
 
-                // Extra parameters if you want to pass to server
-                entity.addPart("aid", new StringBody(aid));
-                entity.addPart("tinggi", new StringBody(tgg));
-                entity.addPart("flood", new StringBody(fld));
-                entity.addPart("ket", new StringBody(ket));
+                try{
+                    JSONObject js = new JSONObject(dataJson);
+                    entity.addPart("uid", new StringBody(js.getString("uid")));
+                    entity.addPart("report", new StringBody(js.getString("report")));
+                    entity.addPart("iid", new StringBody(js.getString("iid")));
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
 
                 totalSize = entity.getContentLength();
                 httppost.setEntity(entity);
@@ -187,38 +180,24 @@ public class UploadActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            String msg = null;
             loading.dismiss();
 
+            String msg = null;
             try {
                 JSONObject jsObj = new JSONObject(result);
                 boolean status = jsObj.getBoolean("status");
+
+                if(status) finish();
+
                 msg = jsObj.getString("msg");
-
-                if(status){
-                    DataLogic ldata = new DataLogic(getApplicationContext());
-                    Data d = new Data() {};
-
-                    d.setAid(Integer.parseInt(aid));
-                    d.setName(name);
-                    d.setTinggi(Double.parseDouble(tgg));
-                    d.setBanjir(Integer.parseInt(fld));
-                    d.setType(type);
-                    d.setDesc(ket);
-
-                    ldata.add(d);
-                    finish();
-                }
-
-            } catch (JSONException e) {
+            }catch (JSONException e){
                 e.printStackTrace();
             }
 
-            Toast.makeText(UploadActivity.this, msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(UploadReportActivity.this, msg, Toast.LENGTH_SHORT).show();
 
             super.onPostExecute(result);
         }
 
     }
-
 }
