@@ -32,7 +32,7 @@ public class DataLogic implements InData {
         values.put("aid", d.getAid());
         values.put("name", d.getName());
         values.put("img", d.getImg());
-//        values.put("postdate", String.valueOf(d.getPostDate()));
+        values.put("type", d.getType());
         values.put("tinggi", d.getTinggi());
         values.put("banjir", d.getBanjir());
         values.put("desc", d.getDesc());
@@ -63,7 +63,7 @@ public class DataLogic implements InData {
         List<Data> list = new ArrayList<Data>();
 
         SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cur = db.rawQuery("Select aid, name, postdate, tinggi, banjir, desc " +
+        Cursor cur = db.rawQuery("Select aid, name, postdate, tinggi, type, banjir, desc " +
                 "from data", null);
 
         if (cur.moveToFirst()) {
@@ -75,6 +75,7 @@ public class DataLogic implements InData {
                 d.setBanjir(cur.getInt(cur.getColumnIndex("banjir")));
                 d.setTinggi(cur.getDouble(cur.getColumnIndex("tinggi")));
                 d.setPostDate(Timestamp.valueOf(cur.getString(2)));
+                d.setType(cur.getString(cur.getColumnIndex("type")));
                 d.setDesc(cur.getString(cur.getColumnIndex("desc")));
 
                 list.add(d);

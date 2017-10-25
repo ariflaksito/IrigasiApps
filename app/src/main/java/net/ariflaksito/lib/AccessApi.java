@@ -30,6 +30,16 @@ public class AccessApi {
         conn.addVar("data", data[0]);
 
         boolean rs = conn.postData();
+        out = conn.getOutput();
+        return rs;
+    }
+
+    public boolean postReport(String[] data){
+        HttpConnect conn = new HttpConnect(uri + "inreport", 1);
+        conn.addVar("data", data[0]);
+
+        boolean rs = conn.postData();
+        out = conn.getOutput();
         return rs;
     }
 

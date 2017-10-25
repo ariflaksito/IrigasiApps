@@ -15,6 +15,7 @@ public abstract class Data {
     private Timestamp postdate;
     private double tinggi;
     private int banjir;
+    private String type;
     private String desc;
 
     public Data(){}
@@ -82,5 +83,13 @@ public abstract class Data {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

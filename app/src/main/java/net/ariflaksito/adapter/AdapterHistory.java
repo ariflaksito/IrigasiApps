@@ -57,6 +57,9 @@ public class AdapterHistory extends BaseAdapter {
         TextView dt1 = (TextView) view.findViewById(R.id.data1);
         dt1.setText(dataList.get("data1"));
 
+        TextView dt2 = (TextView) view.findViewById(R.id.type);
+        dt2.setText(dataList.get("type"));
+
         LinearLayout button = (LinearLayout) view.findViewById(R.id.id_his);
 
         return view;

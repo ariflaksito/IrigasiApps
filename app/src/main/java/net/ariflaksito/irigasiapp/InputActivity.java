@@ -45,7 +45,7 @@ public class InputActivity extends ActionBarActivity {
     private static String IMAGE_DIRECTORY_NAME = "IrigasiApp";
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 
-    private String id, name;
+    private String id, name, type;
     private EditText tgg, ket;
     private CheckBox bjr;
     private Uri fileUri;
@@ -61,6 +61,7 @@ public class InputActivity extends ActionBarActivity {
 
         id = getIntent().getExtras().getString("id");
         name = getIntent().getExtras().getString("name");
+        type = getIntent().getExtras().getString("desc");
 
         TextView textName = (TextView) findViewById(R.id.textName);
         textName.setText(name);
@@ -87,15 +88,19 @@ public class InputActivity extends ActionBarActivity {
                 try {
                     jsdata.put("aid", id);
                     jsdata.put("name", name);
+                    jsdata.put("type", type);
+                    jsdata.put("img", "");
                     jsdata.put("tgg", tgg.getText().toString());
                     jsdata.put("fld", (bjr.isChecked())?"1":"0");
                     jsdata.put("ket", ket.getText().toString());
+
+                    new PostData().execute(jsdata.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                new PostData().execute(jsdata.toString());
+
             }
         });
 
@@ -121,6 +126,7 @@ public class InputActivity extends ActionBarActivity {
     public class PostData extends AsyncTask<String, String, Boolean>{
         String msg;
         String[] vars;
+        AccessApi api;
         private ProgressDialog dialog = new ProgressDialog(
                 InputActivity.this);
 
@@ -133,7 +139,7 @@ public class InputActivity extends ActionBarActivity {
             boolean rs = false;
             vars = params;
 
-            AccessApi api = new AccessApi(InputActivity.this);
+            api = new AccessApi(InputActivity.this);
             rs = api.postData(params);
             return rs;
         }
@@ -146,33 +152,40 @@ public class InputActivity extends ActionBarActivity {
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
             if (result) {
-                Toast.makeText(InputActivity.this,
-                        "Data berhasil dikirim ke server", Toast.LENGTH_SHORT)
-                        .show();
-                finish();
 
                 try {
-                    DataLogic ldata = new DataLogic(getApplicationContext());
-                    JSONObject jsObj = new JSONObject(vars[0]);
+                    JSONObject jsOut = new JSONObject(api.getOutput().toString());
+                    boolean status = jsOut.getBoolean("sts");
 
-                    Data d = new Data() {};
+                    if(status){
+                        DataLogic ldata = new DataLogic(getApplicationContext());
+                        JSONObject jsObj = new JSONObject(vars[0]);
 
-                    d.setAid(jsObj.getInt("aid"));
-                    d.setName(jsObj.getString("name"));
-                    d.setTinggi(Double.parseDouble(jsObj.getString("tgg")));
-                    d.setBanjir(jsObj.getInt("fld"));
-                    d.setDesc(jsObj.getString("ket"));
+                        Data d = new Data() {};
 
-                    ldata.add(d);
+                        d.setAid(jsObj.getInt("aid"));
+                        d.setName(jsObj.getString("name"));
+                        d.setTinggi(Double.parseDouble(jsObj.getString("tgg")));
+                        d.setBanjir(jsObj.getInt("fld"));
+                        d.setDesc(jsObj.getString("ket"));
+                        d.setType(jsObj.getString("type"));
+
+                        ldata.add(d);
+
+                        finish();
+                    }
+
+                    Toast.makeText(InputActivity.this,jsOut.getString("msg"), Toast.LENGTH_SHORT)
+                            .show();
+
 
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
 
-            } else {
-                Toast.makeText(InputActivity.this, msg, Toast.LENGTH_SHORT)
-                        .show();
             }
+
+
         }
     }
 

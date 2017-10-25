@@ -32,10 +32,10 @@
             android:label="@string/app_name" />
         <activity
             android:name=".DetailActivity"
-            android:label="@string/app_name" />
+            android:label="Cek Lokasi" />
         <activity
             android:name=".InputActivity"
-            android:label="@string/app_name" />
+            android:label="Input Data" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -44,8 +44,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".UploadActivity" />
-        <activity android:name=".LaporActivity"></activity>
+        <activity android:name=".UploadActivity" android:label="Upload Foto" />
+        <activity android:name=".LaporActivity" android:label="Input Laporan" />
+        <activity android:name=".ProfileActivity" android:label="Profile Petugas"></activity>
     </application>
 
 </manifest>

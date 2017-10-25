@@ -107,7 +107,7 @@ public class DetailActivity extends ActionBarActivity {
                                     "silahkan menuju lokasi sampai dengan 50 meter dan tekan tombol Cek Lokasi");
                         }
                     }
-                }, 3000);
+                }, 1500);
             }
         });
 

@@ -82,6 +82,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.profile:
+                Intent inn = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(inn);
+
+                return(true);
             case R.id.lapor:
                 Intent in = new Intent(MainActivity.this, LaporActivity.class);
                 startActivity(in);

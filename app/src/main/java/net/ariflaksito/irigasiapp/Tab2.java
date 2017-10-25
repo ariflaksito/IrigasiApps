@@ -17,7 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,11 +52,13 @@ public class Tab2 extends ListFragment {
         for(Data d : dx){
             HashMap<String, String> loc = new HashMap<>();
 
-            android.util.Log.d("--irigasiApp--", d.getName());
-
             loc.put("id", d.getAid()+"");
             loc.put("loc", d.getName());
-            loc.put("date", d.getPostDate().toString());
+
+            Date dd = new Date();
+            dd.setTime(d.getPostDate().getTime());
+            loc.put("date", new SimpleDateFormat("dd MMM - HH:mm").format(dd));
+            loc.put("type", d.getType().toString());
             loc.put("data1", d.getTinggi()+"");
 
             dataHistory.add(loc);
