@@ -92,6 +92,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 startActivity(in);
 
                 return(true);
+            case R.id.dtlapor:
+                Intent itn = new Intent(MainActivity.this, DataLaporActivity.class);
+                startActivity(itn);
+
+                return(true);
+
             case R.id.logout:
                 IrigasiLogic irigasiLogic = new IrigasiLogic(getApplicationContext());
                 irigasiLogic.remove();

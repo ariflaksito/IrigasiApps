@@ -29,6 +29,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name" />
         <activity
             android:name=".DetailActivity"
@@ -53,7 +54,11 @@
         <activity
             android:name=".ProfileActivity"
             android:label="Profile Petugas" />
-        <activity android:name=".UploadReportActivity" android:label="Upload Foto Laporan"></activity>
+        <activity
+            android:name=".UploadReportActivity"
+            android:label="Upload Foto Laporan" />
+        <activity android:name=".DataLaporActivity"
+            android:label="Data Laporan"></activity>
     </application>
 
 </manifest>

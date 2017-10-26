@@ -60,6 +60,14 @@ public class AccessApi {
         return rs;
     }
 
+    public boolean report(int uid){
+        HttpConnect conn = new HttpConnect(uri + "report/"+ uid);
+
+        boolean rs = conn.getData();
+        out = conn.getOutput();
+        return rs;
+    }
+
     public String getOutput(){
         return out;
     }
