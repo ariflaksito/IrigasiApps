@@ -20,6 +20,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 public class HttpConnect {
 
@@ -84,6 +87,7 @@ public class HttpConnect {
     public boolean getData() {
         HttpClient Client = new DefaultHttpClient();
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
+
         try {
             out = Client.execute(httpget, responseHandler);
             return true;

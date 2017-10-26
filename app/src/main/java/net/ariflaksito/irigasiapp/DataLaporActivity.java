@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.ariflaksito.adapter.AdapterLocation;
 import net.ariflaksito.lib.AccessApi;
@@ -16,6 +17,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class DataLaporActivity extends AppCompatActivity {
 
@@ -32,7 +36,6 @@ public class DataLaporActivity extends AppCompatActivity {
         uid = pref.getInt("uid", 0);
 
         listView = (ListView) findViewById(R.id.list);
-
         new FetchData().execute();
 
     }
@@ -41,10 +44,6 @@ public class DataLaporActivity extends AppCompatActivity {
         String msg;
         private ProgressDialog dialog = new ProgressDialog(
                 DataLaporActivity.this);
-
-        public FetchData() {
-            msg = "ERROR: Tidak dapat mengirim data, periksa koneksi jaringan anda";
-        }
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -67,32 +66,37 @@ public class DataLaporActivity extends AppCompatActivity {
             boolean status = false;
             String data = "";
 
-            try {
-                JSONObject js = new JSONObject(msg);
-                status = js.getBoolean("status");
+            if(result) {
+                try {
+                    JSONObject js = new JSONObject(msg);
+                    status = js.getBoolean("status");
 
-                if(status){
+                    if (status) {
 
-                    dataReport = new ArrayList<>();
+                        dataReport = new ArrayList<>();
 
-                    JSONArray jsReport = js.getJSONArray("data");
-                    for(int i=0; i<jsReport.length(); i++){
-                        JSONObject jsData = jsReport.getJSONObject(i);
-                        HashMap<String, String> report = new HashMap<>();
+                        JSONArray jsReport = js.getJSONArray("data");
+                        for (int i = 0; i < jsReport.length(); i++) {
+                            JSONObject jsData = jsReport.getJSONObject(i);
+                            HashMap<String, String> report = new HashMap<>();
 
-                        report.put("name", jsData.getString("irigasi"));
-                        report.put("addr", jsData.getString("report"));
-                        report.put("desc", jsData.getString("postdate"));
+                            report.put("name", jsData.getString("irigasi"));
+                            report.put("addr", jsData.getString("report"));
+                            report.put("desc", jsData.getString("postdate"));
 
-                        dataReport.add(report);
+                            dataReport.add(report);
+                        }
+
+                        AdapterLocation adapter = new AdapterLocation(dataReport);
+                        listView.setAdapter(adapter);
                     }
 
-                    AdapterLocation adapter = new AdapterLocation(dataReport);
-                    listView.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }else{
+                Toast.makeText(DataLaporActivity.this, "ERROR: Tidak dapat mengirim data, periksa koneksi jaringan anda",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 
