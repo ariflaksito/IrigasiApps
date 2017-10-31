@@ -14,9 +14,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         TextView txt1 = (TextView)findViewById(R.id.txt1);
         TextView txt2 = (TextView)findViewById(R.id.txt2);
+        TextView txt3 = (TextView)findViewById(R.id.txt3);
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         txt1.setText(pref.getString("name",""));
         txt2.setText(pref.getString("username",""));
+        txt3.setText(getString(R.string.version));
     }
 }

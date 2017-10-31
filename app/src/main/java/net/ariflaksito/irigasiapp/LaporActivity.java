@@ -169,12 +169,14 @@ public class LaporActivity extends AppCompatActivity{
                         finish();
                     }
                 } catch (JSONException e) {
+                    Toast.makeText(LaporActivity.this, "ERROR: Tidak dapat mengirim data, terjadi kesalahan di server",
+                            Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
 
             } else {
-                Toast.makeText(LaporActivity.this, msg, Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(LaporActivity.this, "ERROR: Tidak dapat mengirim data, terjadi kesalahan di server",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }

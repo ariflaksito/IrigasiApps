@@ -185,9 +185,14 @@ public class InputActivity extends ActionBarActivity {
 
 
                 }catch (JSONException e){
+                    Toast.makeText(InputActivity.this, "ERROR: Tidak dapat mengirim data, terjadi kesalahan di server",
+                            Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
 
+            }else{
+                Toast.makeText(InputActivity.this, "ERROR: Tidak dapat mengirim data, terjadi kesalahan di server",
+                        Toast.LENGTH_SHORT).show();
             }
 
 

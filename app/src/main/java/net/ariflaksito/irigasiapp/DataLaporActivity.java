@@ -95,7 +95,7 @@ public class DataLaporActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }else{
-                Toast.makeText(DataLaporActivity.this, "ERROR: Tidak dapat mengirim data, periksa koneksi jaringan anda",
+                Toast.makeText(DataLaporActivity.this, "ERROR: Tidak dapat mengambil data, terjadi kesalahan di server",
                         Toast.LENGTH_SHORT).show();
             }
         }

@@ -211,6 +211,7 @@ public class UploadActivity extends AppCompatActivity {
                 }
 
             } catch (JSONException e) {
+                msg = "ERROR: Tidak dapat mengirim data, terjadi kesalahan di server";
                 e.printStackTrace();
             }
 

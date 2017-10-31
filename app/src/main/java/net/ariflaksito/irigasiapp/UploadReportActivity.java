@@ -191,6 +191,7 @@ public class UploadReportActivity extends AppCompatActivity {
 
                 msg = jsObj.getString("msg");
             }catch (JSONException e){
+                msg = "ERROR: Tidak dapat mengirim data, terjadi kesalahan di server";
                 e.printStackTrace();
             }
 
