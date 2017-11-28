@@ -68,6 +68,15 @@ public class AccessApi {
         return rs;
     }
 
+    public boolean postPwd(String[] data){
+        HttpConnect conn = new HttpConnect(uri + "pwd", 1);
+        conn.addVar("data", data[0]);
+
+        boolean rs = conn.postData();
+        out = conn.getOutput();
+        return rs;
+    }
+
     public String getOutput(){
         return out;
     }

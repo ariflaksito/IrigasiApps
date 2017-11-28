@@ -57,8 +57,12 @@
         <activity
             android:name=".UploadReportActivity"
             android:label="Upload Foto Laporan" />
-        <activity android:name=".DataLaporActivity"
-            android:label="Data Laporan"></activity>
+        <activity
+            android:name=".DataLaporActivity"
+            android:label="Data Laporan" />
+        <activity
+            android:name=".PasswordActivity"
+            android:label="Ganti Password"></activity>
     </application>
 
 </manifest>

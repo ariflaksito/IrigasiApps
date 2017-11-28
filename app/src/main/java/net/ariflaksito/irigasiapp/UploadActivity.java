@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class UploadActivity extends AppCompatActivity {
 
@@ -205,6 +206,9 @@ public class UploadActivity extends AppCompatActivity {
                     d.setBanjir(Integer.parseInt(fld));
                     d.setType(type);
                     d.setDesc(ket);
+
+                    List<Data> dx = ldata.get();
+                    if(dx.size()>20) ldata.remove();
 
                     ldata.add(d);
                     finish();

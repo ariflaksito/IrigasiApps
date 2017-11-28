@@ -64,7 +64,7 @@ public class DataLogic implements InData {
 
         SQLiteDatabase db = database.getWritableDatabase();
         Cursor cur = db.rawQuery("Select aid, name, postdate, tinggi, type, banjir, desc " +
-                "from data", null);
+                "from data order by postdate desc", null);
 
         if (cur.moveToFirst()) {
             do {

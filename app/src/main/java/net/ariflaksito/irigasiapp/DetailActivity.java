@@ -93,9 +93,7 @@ public class DetailActivity extends ActionBarActivity {
                     @Override
                     public void run() {
                         textLoading.setVisibility(VISIBLE);
-                        boolean a = true;
-                        if(a){
-//                        if(finalLen <=50) {
+                        if(finalLen <=70) {
                             loading.setVisibility(View.GONE);
                             btnGo.setVisibility(VISIBLE);
                             textLoading.setText("Anda sudah berada di lokasi dengan jarak "+ finalLen +" meter");

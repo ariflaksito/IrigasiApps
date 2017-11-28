@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -174,6 +175,9 @@ public class InputActivity extends ActionBarActivity {
                         d.setBanjir(jsObj.getInt("fld"));
                         d.setDesc(jsObj.getString("ket"));
                         d.setType(jsObj.getString("type"));
+
+                        List<Data> dx = ldata.get();
+                        if(dx.size()>20) ldata.remove();
 
                         ldata.add(d);
 

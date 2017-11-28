@@ -6,7 +6,8 @@ package net.ariflaksito.models;
 
 public class Config {
 
-    private String uri = "http://10.0.2.2/irigasi-web/";
+    //private String uri = "http://10.0.2.2/irigasi-web/";
+    private String uri = "http://103.255.15.48:82/irigasi-web/";
     private String urlServer;
     private String uploadUrl;
 

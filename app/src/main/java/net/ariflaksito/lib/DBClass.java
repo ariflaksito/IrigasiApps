@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBClass extends SQLiteOpenHelper {
 
     public DBClass(Context context) {
-        super(context, "dbirigasi", null, 5);
+        super(context, "dbirigasi", null, 6);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class DBClass extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE if not exists data "
                 + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "aid INTEGER, name VARCHAR, img VARCHAR, "
-                + "postdate DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                + "postdate DATETIME DEFAULT (datetime('now','localtime')), "
                 + "tinggi DOUBLE, banjir INT, type VARCHAR, desc VARCHAR);");
 
     }
